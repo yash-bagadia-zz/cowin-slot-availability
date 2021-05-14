@@ -210,7 +210,7 @@ export default function App() {
   }
   async function clearData() {
     setSlotsData([]);
-    await sleepNow(15000);
+    await sleepNow(10000);
     clearData();
   }
   const searchSlots = () => {

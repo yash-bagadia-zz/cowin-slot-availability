@@ -1,0 +1,8 @@
+{
+    "short_name": "Cowin Slot Monitor",
+    "name": "Cowin Slot Monitor",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+  }

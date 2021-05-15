@@ -186,6 +186,8 @@ export default function App() {
         axios
           .get(url)
           .then((response) => {
+            //clear any existing messages.
+            message.destroy();
             const a = response.data;
             let idx = 1;
             a.centers.forEach(function (centre) {
@@ -234,6 +236,8 @@ export default function App() {
             }
           })
           .catch((error) => {
+            //clear any existing messages.
+            message.destroy();
             message.error(
               "If this message is appearing continuously then something is wrong. \n Please reload the application and then try again or login to Cowin once in the browser and then try again. If the problem persists then contact the Developer - Yash Bagadia"
             );

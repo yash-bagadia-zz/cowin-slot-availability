@@ -346,7 +346,7 @@ export default function App() {
       <Title>Cowin Vaccine Slot Monitor</Title>
       <Row justify="center" gutter={24}>
         <Col>
-          <Title level={5}>Select no. of slots required</Title>
+          <Title level={5}>Enter no. of slots required for notification</Title>
         </Col>
         <Col>
           <InputNumber

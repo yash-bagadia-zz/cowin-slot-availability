@@ -43,6 +43,7 @@ const apiType = {
 const vacccines = [
   { label: "Covishield", value: "COVISHIELD" },
   { label: "Covaxin", value: "COVAXIN" },
+  { label: "Sputnik V", value: "SPUTNIK V" }
 ];
 const feeTypes = [
   { label: "Free", value: "Free" },
@@ -108,6 +109,7 @@ export default function App() {
   const [selectedVaccines, setSelectedVaccines, vaccinesRef] = useState([
     "COVAXIN",
     "COVISHIELD",
+    "SPUTNIK V"
   ]);
   const [selectedFeeTypes, setSelectedFeeTypes, feeRef] = useState([
     "Free",

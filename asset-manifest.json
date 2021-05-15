@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/cowin-slot-availability/static/css/main.10e9abac.chunk.css",
-    "main.js": "/cowin-slot-availability/static/js/main.05396fa5.chunk.js",
-    "main.js.map": "/cowin-slot-availability/static/js/main.05396fa5.chunk.js.map",
+    "main.js": "/cowin-slot-availability/static/js/main.6ea085ea.chunk.js",
+    "main.js.map": "/cowin-slot-availability/static/js/main.6ea085ea.chunk.js.map",
     "runtime-main.js": "/cowin-slot-availability/static/js/runtime-main.286c6de8.js",
     "runtime-main.js.map": "/cowin-slot-availability/static/js/runtime-main.286c6de8.js.map",
     "static/css/2.fc2db407.chunk.css": "/cowin-slot-availability/static/css/2.fc2db407.chunk.css",
-    "static/js/2.833bb91c.chunk.js": "/cowin-slot-availability/static/js/2.833bb91c.chunk.js",
-    "static/js/2.833bb91c.chunk.js.map": "/cowin-slot-availability/static/js/2.833bb91c.chunk.js.map",
+    "static/js/2.028ab5a4.chunk.js": "/cowin-slot-availability/static/js/2.028ab5a4.chunk.js",
+    "static/js/2.028ab5a4.chunk.js.map": "/cowin-slot-availability/static/js/2.028ab5a4.chunk.js.map",
     "index.html": "/cowin-slot-availability/index.html",
     "static/css/2.fc2db407.chunk.css.map": "/cowin-slot-availability/static/css/2.fc2db407.chunk.css.map",
     "static/css/main.10e9abac.chunk.css.map": "/cowin-slot-availability/static/css/main.10e9abac.chunk.css.map",
-    "static/js/2.833bb91c.chunk.js.LICENSE.txt": "/cowin-slot-availability/static/js/2.833bb91c.chunk.js.LICENSE.txt"
+    "static/js/2.028ab5a4.chunk.js.LICENSE.txt": "/cowin-slot-availability/static/js/2.028ab5a4.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.286c6de8.js",
     "static/css/2.fc2db407.chunk.css",
-    "static/js/2.833bb91c.chunk.js",
+    "static/js/2.028ab5a4.chunk.js",
     "static/css/main.10e9abac.chunk.css",
-    "static/js/main.05396fa5.chunk.js"
+    "static/js/main.6ea085ea.chunk.js"
   ]
 }

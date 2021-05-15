@@ -466,7 +466,7 @@ export default function App() {
       </Row>
       <Row justify="center" gutter={24}>
         <Col>
-          <Title level={5}>API Type: (Noobs Only!)</Title>
+          <Title level={5}>API Type: (Whatever works for You!)</Title>
         </Col>
         <Col>
           <Radio.Group onChange={onSearchAPITypeChange} value={selectedAPIType}>

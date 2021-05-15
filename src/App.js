@@ -219,6 +219,7 @@ export default function App() {
     fetchByPincode();
     clearData();
     setSearching(true);
+    audio.play();
   };
   const stopSearch = () => {
     setInterval(0);

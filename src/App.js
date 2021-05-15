@@ -27,6 +27,11 @@ const audio = new Audio(
   "https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3"
 );
 
+function addDays(date, days) {
+  const copy = new Date(Number(date));
+  copy.setDate(date.getDate() + days);
+  return copy;
+}
 const vacccines = [
   { label: "Covishield", value: "COVISHIELD" },
   { label: "Covaxin", value: "COVAXIN" }
@@ -90,6 +95,7 @@ export default function App() {
   const [minAge, setMinAge, minAgeRef] = useState(18);
   const [pincode, setPincode] = useState("");
   const [interval, setInterval, intervalRef] = useState(1);
+  const [weeks, setWeeks, weeksRef] = useState(1);
   const [searching, setSearching, searchingRef] = useState(false);
   const [selectedVaccines, setSelectedVaccines, vaccinesRef] = useState([
     "COVAXIN",
@@ -121,10 +127,14 @@ export default function App() {
   const onMinSlotsChange = (minSlots) => {
     setMinSlots(minSlots);
   };
+  const onWeeksChange = noOfWeeks => {
+    setWeeks(noOfWeeks);
+  };
 
   async function fetchByPincode() {
     const searchByPin = searchRef.current === 2;
     let slots = [];
+    const currDate = new Date();
     const districtUrl =
       "https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=";
     const pinUrl =
@@ -140,69 +150,72 @@ export default function App() {
     }
     const feeTypes = feeRef.current;
     const vacccines = vaccinesRef.current;
-    for (let i = 0; i < codes.length; i++) {
-      let url = "";
-      const code = codes[i].trim();
-      if (searchByPin && code) {
-        url = pinUrl + code;
-      } else {
-        url = districtUrl + code;
-      }
-      url += "&date=" + new Date().toLocaleDateString().replaceAll("/", "-");
-      axios
-        .get(url)
-        .then((response) => {
-          const a = response.data;
-          let idx = 1;
-          a.centers.forEach(function (centre) {
-            if (centre && centre.sessions) {
-              if (feeTypes.indexOf(centre.fee_type) !== -1) {
-                centre.sessions.forEach(function (session) {
-                  if (
-                    session.min_age_limit === minAgeRef.current &&
-                    session.available_capacity >= minSlotsRef.current &&
-                    vacccines.indexOf(session.vaccine) !== -1
-                  ) {
-                    audio.play();
-                    const slot = {
-                      key: centre.name + idx,
-                      name: centre.name,
-                      address: centre.address,
-                      fee_type: centre.fee_type,
-                      min_age_limit: session.min_age_limit,
-                      available_capacity: session.available_capacity,
-                      date: session.date,
-                      vaccine: session.vaccine,
-                      district_name: centre.district_name,
-                      pincode: centre.pincode
-                    };
-                    slots.push(slot);
-                    idx++;
-                    console.log(
-                      (searchByPin ? "Pincode" : "District") +
-                        ": " +
-                        code +
-                        "--->>" +
-                        "Centre: " +
-                        centre.name +
-                        "----->>>>---Date: " +
-                        session.date +
-                        "---->>>> " +
-                        session.available_capacity
-                    );
-                  }
-                });
+    for(let k = 0; k < weeksRef.current; k++) {
+      const dateToFetch = addDays(currDate, k*7).toLocaleDateString().replaceAll("/", "-");
+      for (let i = 0; i < codes.length; i++) {
+        let url = "";
+        const code = codes[i].trim();
+        if (searchByPin && code) {
+          url = pinUrl + code;
+        } else {
+          url = districtUrl + code;
+        }
+        url += "&date=" + dateToFetch;
+        axios
+          .get(url)
+          .then((response) => {
+            const a = response.data;
+            let idx = 1;
+            a.centers.forEach(function (centre) {
+              if (centre && centre.sessions) {
+                if (feeTypes.indexOf(centre.fee_type) !== -1) {
+                  centre.sessions.forEach(function (session) {
+                    if (
+                      session.min_age_limit === minAgeRef.current &&
+                      session.available_capacity >= minSlotsRef.current &&
+                      vacccines.indexOf(session.vaccine) !== -1
+                    ) {
+                      audio.play();
+                      const slot = {
+                        key: centre.name + idx,
+                        name: centre.name,
+                        address: centre.address,
+                        fee_type: centre.fee_type,
+                        min_age_limit: session.min_age_limit,
+                        available_capacity: session.available_capacity,
+                        date: session.date,
+                        vaccine: session.vaccine,
+                        district_name: centre.district_name,
+                        pincode: centre.pincode
+                      };
+                      slots.push(slot);
+                      idx++;
+                      console.log(
+                        (searchByPin ? "Pincode" : "District") +
+                          ": " +
+                          code +
+                          "--->>" +
+                          "Centre: " +
+                          centre.name +
+                          "----->>>>---Date: " +
+                          session.date +
+                          "---->>>> " +
+                          session.available_capacity
+                      );
+                    }
+                  });
+                }
               }
+            });
+            if (slots.length > 0) {
+              setSlotsData(slots);
             }
+          })
+          .catch((error) => {
+            console.log(error);
           });
-          if (slots.length > 0) {
-            setSlotsData(slots);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+      }
+  }
     if (intervalRef.current * 1000 > 500) {
       await sleepNow(intervalRef.current * 1000);
       fetchByPincode();
@@ -375,9 +388,9 @@ export default function App() {
           />
         </Col>
       </Row>
+      <Row justify="center" gutter={24}>
       {searchType === 1 ? (
         <React.Fragment>
-          <Row justify="center" gutter={24}>
             <Col>
               <Dropdown overlay={states} trigger={["click"]}>
                 <Button>
@@ -392,11 +405,9 @@ export default function App() {
                 </Button>
               </Dropdown>
             </Col>
-          </Row>
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Row justify="center" gutter={24}>
             <Col span={12}>
               <Input
                 placeholder="Type a pincode and then press Enter"
@@ -405,9 +416,20 @@ export default function App() {
                 value={pincode}
               />
             </Col>
-          </Row>
         </React.Fragment>
       )}
+      <Col>
+          <Title level={5}>No. of weeks to search for</Title>
+        </Col>
+      <Col>
+          <InputNumber
+            min={1}
+            max={4}
+            value={weeks}
+            onChange={onWeeksChange}
+          />
+        </Col>
+      </Row>
       <Row justify="center" gutter={24}>
         {districtTags}
       </Row>

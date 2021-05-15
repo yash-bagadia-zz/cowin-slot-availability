@@ -1,27 +1,28 @@
 import "./styles.css";
-import React from "react";
+import "antd/dist/antd.css";
+
 import {
-  Table,
+  Button,
+  Checkbox,
+  Col,
+  Dropdown,
+  Input,
+  Menu,
   PageHeader,
   Radio,
-  Menu,
-  Dropdown,
   Row,
-  Col,
-  Button,
-  Input,
-  Checkbox,
   Spin,
-  message
+  Table,
+  message,
 } from "antd";
-import { DownOutlined } from "@ant-design/icons";
-import "antd/dist/antd.css";
-import axios from "axios";
-import { InputNumber } from "antd";
-import Filter from "./Filter";
-import useState from "react-usestateref";
 
+import { DownOutlined } from "@ant-design/icons";
+import Filter from "./Filter";
+import { InputNumber } from "antd";
+import React from "react";
 import { Typography } from "antd";
+import axios from "axios";
+import useState from "react-usestateref";
 
 const { Title } = Typography;
 const audio = new Audio(
@@ -33,60 +34,66 @@ function addDays(date, days) {
   copy.setDate(date.getDate() + days);
   return copy;
 }
+
+const apiType = {
+  Public: "Public",
+  Private: "Private",
+};
+
 const vacccines = [
   { label: "Covishield", value: "COVISHIELD" },
-  { label: "Covaxin", value: "COVAXIN" }
+  { label: "Covaxin", value: "COVAXIN" },
 ];
 const feeTypes = [
   { label: "Free", value: "Free" },
-  { label: "Paid", value: "Paid" }
+  { label: "Paid", value: "Paid" },
 ];
 const columns = [
   {
     title: "Center",
     dataIndex: "name",
-    key: "name"
+    key: "name",
   },
   {
     title: "District",
     dataIndex: "district_name",
-    key: "district_name"
+    key: "district_name",
   },
   {
     title: "Pincode",
     dataIndex: "pincode",
-    key: "pincode"
+    key: "pincode",
   },
   {
     title: "Date",
     dataIndex: "date",
-    key: "date"
+    key: "date",
   },
   {
     title: "Address",
     dataIndex: "address",
-    key: "address"
+    key: "address",
   },
   {
     title: "Slots Avalilable",
     dataIndex: "available_capacity",
-    key: "available_capacity"
+    key: "available_capacity",
   },
   {
     title: "Min Age Limit",
     dataIndex: "min_age_limit",
-    key: "min_age_limit"
+    key: "min_age_limit",
   },
   {
     title: "Vaccine",
     dataIndex: "vaccine",
-    key: "vaccine"
+    key: "vaccine",
   },
   {
     title: "Fee type",
     dataIndex: "fee_type",
-    key: "fee_type"
-  }
+    key: "fee_type",
+  },
 ];
 const sleepNow = (delay) =>
   new Promise((resolve) => setTimeout(resolve, delay));
@@ -100,15 +107,18 @@ export default function App() {
   const [searching, setSearching, searchingRef] = useState(false);
   const [selectedVaccines, setSelectedVaccines, vaccinesRef] = useState([
     "COVAXIN",
-    "COVISHIELD"
+    "COVISHIELD",
   ]);
   const [selectedFeeTypes, setSelectedFeeTypes, feeRef] = useState([
     "Free",
-    "Paid"
+    "Paid",
   ]);
+  const [selectedAPIType, setSelectedAPIType, apiTypeRef] = useState(
+    apiType.Public
+  );
   const [selectedState, setSelectedState] = useState({
     state_id: "0",
-    state_name: "Select State"
+    state_name: "Select State",
   });
   const [statesData, setStatesData] = useState([]);
   const [selectedDistricts, setSelectedDistricts, districtsRef] = useState([]);
@@ -128,18 +138,27 @@ export default function App() {
   const onMinSlotsChange = (minSlots) => {
     setMinSlots(minSlots);
   };
-  const onWeeksChange = noOfWeeks => {
+  const onWeeksChange = (noOfWeeks) => {
     setWeeks(noOfWeeks);
+  };
+  const onSearchAPITypeChange = (e) => {
+    setSelectedAPIType(e.target.value);
   };
 
   async function fetchSlots() {
     const searchByPin = searchRef.current === 2;
+    const isPublic = apiTypeRef.current === apiType.Public;
     let slots = [];
     const currDate = new Date();
-    const districtUrl =
-      "https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=";
-    const pinUrl =
-      "https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByPin?pincode=";
+
+    const districtUrl = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/${
+      isPublic ? `public/` : ""
+    }calendarByDistrict?district_id=`;
+
+    const pinUrl = `https://cdn-api.co-vin.in/api/v2/appointment/sessions/${
+      isPublic ? `public/` : ""
+    }calendarByPin?pincode=`;
+
     let codes = [];
     if (searchByPin) {
       codes = pincodesRef.current;
@@ -151,8 +170,10 @@ export default function App() {
     }
     const feeTypes = feeRef.current;
     const vacccines = vaccinesRef.current;
-    for(let k = 0; k < weeksRef.current; k++) {
-      const dateToFetch = addDays(currDate, k*7).toLocaleDateString().replaceAll("/", "-");
+    for (let k = 0; k < weeksRef.current; k++) {
+      const dateToFetch = addDays(currDate, k * 7)
+        .toLocaleDateString()
+        .replaceAll("/", "-");
       for (let i = 0; i < codes.length; i++) {
         let url = "";
         const code = codes[i].trim();
@@ -187,7 +208,7 @@ export default function App() {
                         date: session.date,
                         vaccine: session.vaccine,
                         district_name: centre.district_name,
-                        pincode: centre.pincode
+                        pincode: centre.pincode,
                       };
                       slots.push(slot);
                       idx++;
@@ -213,11 +234,13 @@ export default function App() {
             }
           })
           .catch((error) => {
-            message.error('If this message is appearing continuously then something is wrong. \n Please reload the application and then try again or login to Cowin once in the browser and then try again. If the problem persists then contact the Developer - Yash Bagadia');
+            message.error(
+              "If this message is appearing continuously then something is wrong. \n Please reload the application and then try again or login to Cowin once in the browser and then try again. If the problem persists then contact the Developer - Yash Bagadia"
+            );
             console.log(error);
           });
       }
-  }
+    }
     if (intervalRef.current * 1000 > 500) {
       await sleepNow(intervalRef.current * 1000);
       fetchSlots();
@@ -229,7 +252,7 @@ export default function App() {
     clearData();
   }
   const onSearchClick = () => {
-    if(!searching) {
+    if (!searching) {
       setInterval(0);
       setInterval(1);
       fetchSlots();
@@ -245,7 +268,7 @@ export default function App() {
   const onStateClick = (state) => {
     setSelectedState({
       state_id: state.key,
-      state_name: state.item.node.innerText
+      state_name: state.item.node.innerText,
     });
   };
   const onDistrictRemoval = (removedDist) => {
@@ -274,7 +297,7 @@ export default function App() {
     if (!existingDist) {
       districts.push({
         district_id: distAdded.key,
-        district_name: distAdded.item.node.innerText
+        district_name: distAdded.item.node.innerText,
       });
       setSelectedDistricts(districts);
     }
@@ -348,7 +371,10 @@ export default function App() {
     <div className="App">
       <Title>Cowin Vaccine Slot Monitor</Title>
       <Row justify="center">
-        <PageHeader title="How?" subTitle="Start searching as per your criteria, once slot is available meeting  your criterias, an alarm beep sound will come and slots will be rendered on the UI below. Please keep your system unmute." />
+        <PageHeader
+          title="How?"
+          subTitle="Start searching as per your criteria, once slot is available meeting  your criterias, an alarm beep sound will come and slots will be rendered on the UI below. Please keep your system unmute."
+        />
       </Row>
       <Row justify="center" gutter={24}>
         <Col>
@@ -395,8 +421,8 @@ export default function App() {
         </Col>
       </Row>
       <Row justify="center" gutter={24}>
-      {searchType === 1 ? (
-        <React.Fragment>
+        {searchType === 1 ? (
+          <React.Fragment>
             <Col>
               <Dropdown overlay={states} trigger={["click"]}>
                 <Button>
@@ -411,9 +437,9 @@ export default function App() {
                 </Button>
               </Dropdown>
             </Col>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
             <Col span={12}>
               <Input
                 placeholder="Type a pincode and then press Enter"
@@ -422,18 +448,13 @@ export default function App() {
                 value={pincode}
               />
             </Col>
-        </React.Fragment>
-      )}
-      <Col>
+          </React.Fragment>
+        )}
+        <Col>
           <Title level={5}>No. of weeks to search for</Title>
         </Col>
-      <Col>
-          <InputNumber
-            min={1}
-            max={4}
-            value={weeks}
-            onChange={onWeeksChange}
-          />
+        <Col>
+          <InputNumber min={1} max={4} value={weeks} onChange={onWeeksChange} />
         </Col>
       </Row>
       <Row justify="center" gutter={24}>
@@ -441,14 +462,24 @@ export default function App() {
       </Row>
       <Row justify="center" gutter={24}>
         <Col>
+          <Title level={5}>API Type: (Noobs Only!)</Title>
+        </Col>
+        <Col>
+          <Radio.Group onChange={onSearchAPITypeChange} value={selectedAPIType}>
+            <Radio value={apiType.Public}>{apiType.Public}</Radio>
+            <Radio value={apiType.Private}>{apiType.Private}</Radio>
+          </Radio.Group>
+        </Col>
+        <Col>
           <Button
             disabled={
               (searchType === 2 && selectedPincodes.length === 0) ||
               (searchType === 1 && selectedDistricts.length === 0)
             }
             onClick={onSearchClick}
-            type={!searching ? "primary": "danger"}
-          >{!searching ? "Start Searching" : "Stop Searching"}
+            type={!searching ? "primary" : "danger"}
+          >
+            {!searching ? "Start Searching" : "Stop Searching"}
           </Button>
         </Col>
       </Row>

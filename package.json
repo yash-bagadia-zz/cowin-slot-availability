@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Cowin slot monitor",
   "isPrivate": true,
-  "homepage": "hhttp://yash-bagadia.github.io/cowin-slot-availability",
+  "homepage": "https://yash-bagadia.github.io/cowin-slot-availability",
   "keywords": [
     "react",
     "starter"

@@ -131,7 +131,7 @@ export default function App() {
     setWeeks(noOfWeeks);
   };
 
-  async function fetchByPincode() {
+  async function fetchSlots() {
     const searchByPin = searchRef.current === 2;
     let slots = [];
     const currDate = new Date();
@@ -218,7 +218,7 @@ export default function App() {
   }
     if (intervalRef.current * 1000 > 500) {
       await sleepNow(intervalRef.current * 1000);
-      fetchByPincode();
+      fetchSlots();
     }
   }
   async function clearData() {
@@ -229,7 +229,7 @@ export default function App() {
   const searchSlots = () => {
     setInterval(0);
     setInterval(1);
-    fetchByPincode();
+    fetchSlots();
     clearData();
     setSearching(true);
     audio.play();

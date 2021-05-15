@@ -347,6 +347,9 @@ export default function App() {
   return (
     <div className="App">
       <Title>Cowin Vaccine Slot Monitor</Title>
+      <Row justify="center">
+        <PageHeader title="How?" subTitle="Start searching as per your criteria, once slot is available meeting  your criterias, an alarm beep sound will come and slots will be rendered on the UI below. Please keep your system unmute." />
+      </Row>
       <Row justify="center" gutter={24}>
         <Col>
           <Title level={5}>Enter no. of slots required for notification</Title>

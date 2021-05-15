@@ -228,18 +228,19 @@ export default function App() {
     await sleepNow(10000);
     clearData();
   }
-  const searchSlots = () => {
-    setInterval(0);
-    setInterval(1);
-    fetchSlots();
-    clearData();
-    setSearching(true);
-    audio.play();
-  };
-  const stopSearch = () => {
-    setInterval(0);
-    setSlotsData([]);
-    setSearching(false);
+  const onSearchClick = () => {
+    if(!searching) {
+      setInterval(0);
+      setInterval(1);
+      fetchSlots();
+      clearData();
+      setSearching(true);
+      audio.play();
+    } else {
+      setInterval(0);
+      setSlotsData([]);
+      setSearching(false);
+    }
   };
   const onStateClick = (state) => {
     setSelectedState({
@@ -439,19 +440,12 @@ export default function App() {
         <Col>
           <Button
             disabled={
-              searching ||
               (searchType === 2 && selectedPincodes.length === 0) ||
               (searchType === 1 && selectedDistricts.length === 0)
             }
-            onClick={searchSlots}
-            type="primary"
-          >
-            Start Searching
-          </Button>
-        </Col>
-        <Col>
-          <Button disabled={!searching} type="danger" onClick={stopSearch}>
-            Stop Searching
+            onClick={onSearchClick}
+            type={!searching ? "primary": "danger"}
+          >{!searching ? "Start Searching" : "Stop Searching"}
           </Button>
         </Col>
       </Row>

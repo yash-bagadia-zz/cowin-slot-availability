@@ -11,7 +11,8 @@ import {
   Button,
   Input,
   Checkbox,
-  Spin
+  Spin,
+  message
 } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
@@ -212,6 +213,7 @@ export default function App() {
             }
           })
           .catch((error) => {
+            message.error('If this message is appearing continuously then something is wrong. \n Please reload the application and then try again or login to Cowin once in the browser and then try again. If the problem persists then contact the Developer - Yash Bagadia');
             console.log(error);
           });
       }

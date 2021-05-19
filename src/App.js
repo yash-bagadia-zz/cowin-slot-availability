@@ -81,6 +81,11 @@ const columns = [
     key: "available_capacity",
   },
   {
+    title: "Dose",
+    dataIndex: "dose",
+    key: "dose",
+  },
+  {
     title: "Min Age Limit",
     dataIndex: "min_age_limit",
     key: "min_age_limit",
@@ -102,6 +107,7 @@ const sleepNow = (delay) =>
 export default function App() {
   const [searchType, setValue, searchRef] = useState(1);
   const [minAge, setMinAge, minAgeRef] = useState(18);
+  const [dose, setDose, doseRef] = useState(1);
   const [pincode, setPincode] = useState("");
   const [interval, setInterval, intervalRef] = useState(1);
   const [weeks, setWeeks, weeksRef] = useState(1);
@@ -133,6 +139,9 @@ export default function App() {
   };
   const onMinAgeChange = (e) => {
     setMinAge(e.target.value);
+  };
+  const onDoseChange = (e) => {
+    setDose(e.target.value);
   };
   const onPinChange = (e) => {
     setPincode(e.target.value);
@@ -198,7 +207,8 @@ export default function App() {
                   centre.sessions.forEach(function (session) {
                     if (
                       session.min_age_limit === minAgeRef.current &&
-                      session.available_capacity >= minSlotsRef.current &&
+                    (doseRef.current === 1 && session.available_capacity_dose1 >= minSlotsRef.current ||
+                     doseRef.current === 2 && session.available_capacity_dose2 >= minSlotsRef.current) &&
                       vacccines.indexOf(session.vaccine) !== -1
                     ) {
                       audio.play();
@@ -213,6 +223,7 @@ export default function App() {
                         vaccine: session.vaccine,
                         district_name: centre.district_name,
                         pincode: centre.pincode,
+                        dose: doseRef.current
                       };
                       slots.push(slot);
                       idx++;
@@ -401,6 +412,15 @@ export default function App() {
           <Radio.Group onChange={onMinAgeChange} value={minAge}>
             <Radio value={18}>18+</Radio>
             <Radio value={45}>45+</Radio>
+          </Radio.Group>
+        </Col>
+        <Col>
+          <Title level={5}>Which Dose?</Title>
+        </Col>
+        <Col>
+          <Radio.Group onChange={onDoseChange} value={dose}>
+            <Radio value={1}>Dose 1</Radio>
+            <Radio value={2}>Dose 2</Radio>
           </Radio.Group>
         </Col>
       </Row>
